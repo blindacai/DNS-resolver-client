@@ -11,13 +11,19 @@ import java.nio.file.Paths;
  * Created by linda on 3/4/2017.
  */
 public class testMain {
-    public static final String PATH = "D:\\UBC\\2016 term 2\\cpsc 317\\assignment\\a2\\DNSInitialQuery.bin";
+    public static final String PATH = "C:\\Users\\Alex\\Desktop\\CS317\\New folder (2)\\DNSInitialQuery.bin";
     public static final String DNS = "198.162.35.1";
     public static final int MAX_LEN = 512;
+    public static String FQDN = "www.ugrad.cs.ubc.ca";
 
     public static void main(String[] args) throws IOException {
         DatagramSocket clientSocket = new DatagramSocket();
         InetAddress address = InetAddress.getByName(DNS);
+
+        DeEncodeQuery decoder = new DeEncodeQuery();
+
+        decoder.enCodeFQDN(FQDN);
+
 
         Path path = Paths.get(PATH);
         byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
@@ -34,7 +40,7 @@ public class testMain {
         ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
         int reader;
         while((reader = readbyte.read())!= -1){
-            System.out.println(Integer.toHexString(reader));
+            //System.out.println(Integer.toHexString(reader));
         }
     }
 }
