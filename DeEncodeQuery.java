@@ -1,23 +1,38 @@
+import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin; // JUST USED TO PRINT THE BYTE ARRAY
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created by Alex on 2017-03-05.
  */
 public class DeEncodeQuery {
-    // Todo: create QueryID
-
     // Common starting place for all question queries (minus the QID)
-    private byte[] queryHeaders = new byte[] {
-            (byte)0x00,                                     // QR
-            (byte)0x00,                                     // RCODE
-            (byte)0x00, (byte)0x01,                         // QDCOUNT
-            (byte)0x00, (byte)0x00, (byte)0x00, (byte)0x00, // ANCOUNT
-            (byte)0x00, (byte)0x00};                        // ARCOUNT
+    private byte[] queryHeaders = new byte[]{
+            (byte) 0x00,                                     // QR
+            (byte) 0x00,                                     // RCODE
+            (byte) 0x00, (byte) 0x01,                         // QDCOUNT
+            (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, // ANCOUNT
+            (byte) 0x00, (byte) 0x00                          // ARCOUNT
+    };
+
+    // Seems to have common QTYPE, QCLASS for query questions
+    private byte[] queryQTYPEQCLASS = new byte[] {
+            (byte) 0x00, (byte) 0x01,                       // QTYPE
+            (byte) 0x00, (byte) 0x01                        // QCLASS
+    };
+
+    // Create random byte array of size two for QID
+    public byte[] getQID(){
+        byte[] randomBytes = new byte[2];
+        new Random().nextBytes(randomBytes);
+        return randomBytes;
+    }
 
     // Requires: Takes a FQDN to some website (Ex: www.ugrad.cs.ubc.ca)
-    // Effects: Returns the FQDN in byte form with "." replaced with length of next part
-    //          (Ex: 03<www as bytes>05<ugrad as bytes>2<cs as bytes>
+    // Effects: replaces FQDN into byte form with "." replaced with length of next label
+    //          (Ex: 0x03<www as bytes>0x05<ugrad as bytes>0x2<cs as bytes>
     public void enCodeFQDN(String fqdn) throws IOException {
         ByteArrayOutputStream outputQuery = new ByteArrayOutputStream();
         String[] mySplitQname = fqdn.split("\\.");
@@ -35,13 +50,17 @@ public class DeEncodeQuery {
     // Requires: A FQDN with "."'s replaced with label counts
     // Effects: Combines all query headers and FQDN into a single query for a Java datagram
     public void queryAssembler(byte[] qname){
-        byte[] header = new byte[qname.length + queryHeaders.length];
+        byte[] QID = getQID();
+        byte[] header = new byte[QID.length + qname.length + queryHeaders.length + queryQTYPEQCLASS.length];
 
-        System.arraycopy(queryHeaders, 0, header, 0, queryHeaders.length);
-        System.arraycopy(qname, 0, header, queryHeaders.length, qname.length);
+        System.arraycopy(QID, 0, header, 0, QID.length);
+        System.arraycopy(queryHeaders, 0, header, QID.length, queryHeaders.length);
+        System.arraycopy(qname, 0, header, QID.length + queryHeaders.length, qname.length);
+        System.arraycopy(queryQTYPEQCLASS, 0, header, QID.length + queryHeaders.length + qname.length,
+                queryQTYPEQCLASS.length);
 
-        // header shall contain everything except QID, QTYPE and QCLASS
-        // Todo: create QTYPE and QCLASS headers
+        System.out.print("QUERY: ");
+        System.out.println(HexBin.encode(header));
     }
 
 }
