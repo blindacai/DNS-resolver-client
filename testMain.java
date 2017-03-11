@@ -38,10 +38,14 @@ public class testMain {
         clientSocket.receive(packet);
 
         byte[] response = packet.getData();
+        DNSResponse dns_response = new DNSResponse(response);
+
+        System.out.println(dns_response.getANCount());
+
         ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
         int reader;
         while((reader = readbyte.read())!= -1){
-            //System.out.println(Integer.toHexString(reader));
+            System.out.print(Integer.toHexString(reader));
         }
     }
 }
