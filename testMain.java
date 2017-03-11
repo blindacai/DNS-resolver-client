@@ -11,7 +11,8 @@ import java.nio.file.Paths;
  * Created by linda on 3/4/2017.
  */
 public class testMain {
-    public static final String PATH = "C:\\Users\\Alex\\Desktop\\CS317\\New folder (2)\\DNSInitialQuery.bin";
+    //public static final String PATH = "C:\\Users\\Alex\\Desktop\\CS317\\New folder (2)\\DNSInitialQuery.bin";
+    public static final String PATH = "D:\\UBC\\2016 term 2\\cpsc 317\\assignment\\a2\\DNSInitialQuery.bin";
     public static final String DNS = "198.162.35.1";
     public static final int MAX_LEN = 512;
     public static String FQDN = "www.ugrad.cs.ubc.ca";
@@ -22,13 +23,13 @@ public class testMain {
 
         DeEncodeQuery decoder = new DeEncodeQuery();
 
-        decoder.enCodeFQDN(FQDN);
+        byte[] DNSquery = decoder.enCodeFQDN(FQDN);
 
 
         Path path = Paths.get(PATH);
         byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
 
-        DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 53);
+        DatagramPacket packet = new DatagramPacket(DNSquery, DNSquery.length, address, 53);
         clientSocket.send(packet);
 
         // to receive a response

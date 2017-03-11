@@ -33,7 +33,7 @@ public class DeEncodeQuery {
     // Requires: Takes a FQDN to some website (Ex: www.ugrad.cs.ubc.ca)
     // Effects: replaces FQDN into byte form with "." replaced with length of next label
     //          (Ex: 0x03<www as bytes>0x05<ugrad as bytes>0x2<cs as bytes>
-    public void enCodeFQDN(String fqdn) throws IOException {
+    public byte[] enCodeFQDN(String fqdn) throws IOException {
         ByteArrayOutputStream outputQuery = new ByteArrayOutputStream();
         String[] mySplitQname = fqdn.split("\\.");
 
@@ -44,23 +44,25 @@ public class DeEncodeQuery {
         outputQuery.write((byte)0x00); // END OF QNAME
         byte[] QNAME = outputQuery.toByteArray();
 
-        queryAssembler(QNAME);
+        return queryAssembler(QNAME);
     }
 
     // Requires: A FQDN with "."'s replaced with label counts
     // Effects: Combines all query headers and FQDN into a single query for a Java datagram
-    public void queryAssembler(byte[] qname){
+    public byte[] queryAssembler(byte[] qname){
         byte[] QID = getQID();
-        byte[] header = new byte[QID.length + qname.length + queryHeaders.length + queryQTYPEQCLASS.length];
+        byte[] DNSquery = new byte[QID.length + qname.length + queryHeaders.length + queryQTYPEQCLASS.length];
 
-        System.arraycopy(QID, 0, header, 0, QID.length);
-        System.arraycopy(queryHeaders, 0, header, QID.length, queryHeaders.length);
-        System.arraycopy(qname, 0, header, QID.length + queryHeaders.length, qname.length);
-        System.arraycopy(queryQTYPEQCLASS, 0, header, QID.length + queryHeaders.length + qname.length,
+        System.arraycopy(QID, 0, DNSquery, 0, QID.length);
+        System.arraycopy(queryHeaders, 0, DNSquery, QID.length, queryHeaders.length);
+        System.arraycopy(qname, 0, DNSquery, QID.length + queryHeaders.length, qname.length);
+        System.arraycopy(queryQTYPEQCLASS, 0, DNSquery, QID.length + queryHeaders.length + qname.length,
                 queryQTYPEQCLASS.length);
 
         System.out.print("QUERY: ");
-        System.out.println(HexBin.encode(header));
+        System.out.println(HexBin.encode(DNSquery));
+
+        return DNSquery;
     }
 
 }
