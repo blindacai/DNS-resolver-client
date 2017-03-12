@@ -40,10 +40,10 @@ public class DNSResponse {
 	    // Extract the query ID
         this.queryID = getQueryID();
 	    // Make sure the message is a query response and determine
-        if((data[2] & 0x80) != 1){ return; }               // ensure QR bit is 1 (response)
+        if((data[2] & 0x80) != 0x80){ return; }               // ensure QR bit is 1 (response)
         // if it is an authoritative response or note
-        if((data[2] * 0x04) == 1){ authoritative = true; } // check if AA bit set to 1 (authoritative)
-        if((data[3] * 0xff) != 0){ return; }                // check if RCODE is 0 (no error in response code)
+        if((data[2] & 0x04) != 0){ authoritative = true; } // check if AA bit set to 1 (authoritative)
+        if((data[3] & 0xff) != 0){ return; }                // check if RCODE is 0 (no error in response code)
 
 	    // determine answer count
         answerCount = getANCount();
