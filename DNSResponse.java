@@ -18,7 +18,7 @@ public class DNSResponse {
 
     private int questionCount = 0;
     private byte[] theResponse;
-    private String recordName;
+    private String recordName = "";
     private int ttl;
     private String recordType;
     private String recordValue;
@@ -100,17 +100,17 @@ public class DNSResponse {
 
     // will question count be greater than 1?
     public String getRecordName(){
-        int localhead = 13;
+        int localhead = 12;
 
         int num = 0;
         while(num < this.getQDCount()){
             while(theResponse[localhead] != 0){
 
-                if(localhead != 13)
+                if(localhead != 12)
                     this.recordName += ".";
 
                 this.recordName += byteToChar(localhead);
-                localhead += theResponse[head] + 1;
+                localhead += theResponse[localhead] + 1;
             }
             num++;
         }
@@ -121,8 +121,8 @@ public class DNSResponse {
 
     // convert byte to ASCII
     public String byteToChar(int localhead){
-        String result = null;
-        for(int i = 0; i < theResponse[localhead]; i++){
+        String result = "";
+        for(int i = 1; i <= theResponse[localhead]; i++){
             result += (char)theResponse[localhead + i];
         }
         return result;
