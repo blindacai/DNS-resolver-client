@@ -26,8 +26,8 @@ public class testMain {
         byte[] DNSquery = decoder.enCodeFQDN(FQDN);
 
 
-        Path path = Paths.get(PATH);
-        byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
+//        Path path = Paths.get(PATH);
+//        byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
 
         DatagramPacket packet = new DatagramPacket(DNSquery, DNSquery.length, address, 53);
         clientSocket.send(packet);
@@ -40,12 +40,11 @@ public class testMain {
         byte[] response = packet.getData();
         DNSResponse dns_response = new DNSResponse(response);
 
-        System.out.println(dns_response.getANCount());
-
         ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
         int reader;
         while((reader = readbyte.read())!= -1){
-            System.out.print(Integer.toHexString(reader));
+            System.out.println(Integer.toHexString(reader));
         }
+        System.out.println("end of main");
     }
 }

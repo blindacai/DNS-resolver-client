@@ -1,3 +1,4 @@
+import java.net.InetAddress;
 
 // Lots of the action associated with handling a DNS query is processing
 // the response. Although not required you might find the following skeleton of
@@ -21,7 +22,7 @@ public class DNSResponse {
 
     // Note you will almost certainly need some additional instance variables.
 
-    // When in trace mode you probably want to dump out all the relevant information in a response
+    // todo: When in trace mode you probably want to dump out all the relevant information in a response
 
 	void dumpResponse() {
 		
@@ -33,26 +34,50 @@ public class DNSResponse {
     // probably the minimum that you need.
 
 	public DNSResponse (byte[] data, int len) {
-	    
+        this.theResponse = data;
 	    // The following are probably some of the things 
 	    // you will need to do.
 	    // Extract the query ID
-
+        this.queryID = getQueryID();
 	    // Make sure the message is a query response and determine
-	    // if it is an authoritative response or note
+        if((data[2] & 0x80) != 1){ return; }               // ensure QR bit is 1 (response)
+        // if it is an authoritative response or note
+        if((data[2] * 0x04) == 1){ authoritative = true; } // check if AA bit set to 1 (authoritative)
+        if((data[3] * 0xff) != 0){ return; }                // check if RCODE is 0 (no error in response code)
 
 	    // determine answer count
+        answerCount = getANCount();
 
 	    // determine NS Count
+        nsCount = getNsCount();
 
 	    // determine additional record count
+        additionalCount = getARCount();
 
-	    // Extract list of answers, name server, and additional information response 
+	    // todo: Extract list of answers, name server, and additional information response
 	    // records
 	}
 
 	public DNSResponse(byte[] data){
-        this.theResponse = data;
+    }
+
+
+    // todo: You will probably want a methods to extract a compressed FQDN, IP address
+    // todo: cname, authoritative DNS servers and other values like the query ID etc.
+    public String getCompressedFQDN(){
+        return "";
+    }
+
+    public InetAddress getIPaddr(){
+        return null;
+    }
+
+    public String getCNAME(){
+        return "";
+    }
+
+    public String getAuthoritativeDNSservers(){
+        return "";
     }
 
     public int getQueryID(){
@@ -87,10 +112,7 @@ public class DNSResponse {
         return additionalCount;
     }
 
-    // You will probably want a methods to extract a compressed FQDN, IP address
-    // cname, authoritative DNS servers and other values like the query ID etc.
-
-
+    // todo:
     // You will also want methods to extract the response records and record
     // the important values they are returning. Note that an IPV6 reponse record
     // is of type 28. It probably wouldn't hurt to have a response record class to hold
@@ -99,7 +121,7 @@ public class DNSResponse {
 
     // convert FFFF to unsigned int
     public int bitwise(int pos_first, int pos_second){
-        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
+        return ((theResponse[pos_first] & 0xff) << 8) + (theResponse[pos_second] & 0xff);
     }
 }
 
