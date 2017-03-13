@@ -36,4 +36,9 @@ public class Utils {
         }
         return result;
     }
+
+    // convert FFFF to unsigned int
+    public static int bitwise(byte[] theResponse, int pos_first, int pos_second){
+        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
+    }
 }

@@ -33,44 +33,6 @@ public class DNSResponse {
     // The constructor: you may want to add additional parameters, but the two shown are 
     // probably the minimum that you need.
 
-	public DNSResponse (byte[] data, int len) {
-        this.theResponse = data;
-        // The following are probably some of the things
-        // you will need to do.
-        // Extract the query ID
-        this.queryID = getQueryID();
-        // Make sure the message is a query response and determine
-        if ((data[2] & 0x80) != 0x80) {
-            return;
-        }               // ensure QR bit is 1 (response)
-        // if it is an authoritative response or note
-        if ((data[2] & 0x04) != 0) {
-            authoritative = true;
-        } // check if AA bit set to 1 (authoritative)
-        if ((data[3] & 0xff) != 0) {
-            return;
-        }                // check if RCODE is 0 (no error in response code)
-
-        // determine answer count
-        answerCount = getANCount();
-
-        // determine NS Count
-        nsCount = getNsCount();
-
-        // determine additional record count
-        additionalCount = getARCount();
-
-        // todo: Extract list of answers, name server, and additional information response
-        // records
-        for (int i = 0; i < answerCount; i++) {
-            ResourceRecord answerRecord = new ResourceRecord(theResponse, head);
-            head += 16;
-        }
-
-    }
-
-	public DNSResponse(byte[] data){
-    }
 
 
     // todo: You will probably want a methods to extract a compressed FQDN, IP address

@@ -44,14 +44,17 @@ public class testMain {
         ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
         int reader;
 
-        System.out.println(dns_response.getANCount());
         while((reader = readbyte.read())!= -1){
-            System.out.println(Integer.toHexString(reader));
+            System.out.print(Integer.toHexString(reader));
         }
 
         System.out.println('\n');
         //System.out.println(dns_response.getRecordName());
+        Header myHeader = new Header(response);
+        System.out.println(myHeader.getQueryID());
 
+        QuestionSection questionSection = new QuestionSection(response);
+        ResourceRecord resourceRecord = new ResourceRecord(response, questionSection.getPointer()+1);
 
         QuestionSection qs = new QuestionSection(response);
         System.out.println(qs.getPointer());
