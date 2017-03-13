@@ -7,6 +7,8 @@ public class Utils {
         switch(type){
             case 1:
                 return "A";
+            case 2:
+                return "NS";
             case 28:
                 return "AAAA";
         }

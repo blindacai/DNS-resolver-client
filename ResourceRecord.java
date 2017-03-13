@@ -41,8 +41,6 @@ public class ResourceRecord {
             System.out.println("compFQDN index: " + pointerLocation);
             RRname = Utils.getName(data, pointerLocation);
             System.out.println("Name: " + RRname);
-
-
         } else {
             System.out.println("didn't make it in");
             System.out.println(RRpointer);
@@ -91,5 +89,6 @@ public class ResourceRecord {
         sb.deleteCharAt(sb.length()-1);
         RRRdata = sb.toString();
         System.out.println("Address: " + RRRdata);
+        RRpointer--;
     }
 }

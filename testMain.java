@@ -73,18 +73,20 @@ public class testMain {
             answerList.add(resourceRecord);
         }
 
+        System.out.println();
         System.out.println("start NameServer");
         for(int i = 0; i < myHeader.getNsCount(); i++){
 
-            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer+1);
+            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
             curPointer = resourceRecord.getPointer();
 
             nameServerList.add(resourceRecord);
         }
 
+        System.out.println();
         System.out.println("start additional");
         for(int i = 0; i < myHeader.getARCount(); i++){
-            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer+1);
+            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
             curPointer = resourceRecord.getPointer();
 
             additionalList.add(resourceRecord);
