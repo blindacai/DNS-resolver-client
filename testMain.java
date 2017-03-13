@@ -38,8 +38,9 @@ public class testMain {
         clientSocket.receive(packet);
 
         byte[] response = packet.getData();
-        DNSResponse dns_response = new DNSResponse(response, 5);
+        DNSResponse dns_response = new DNSResponse(response);
 
+        //System.out.println(dns_response.getANCount());
         ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
         int reader;
 
@@ -49,7 +50,10 @@ public class testMain {
         }
 
         System.out.println('\n');
-        System.out.println(dns_response.getCompressedFQDN(29));
-        System.out.println(dns_response.getRecordName());
+        //System.out.println(dns_response.getRecordName());
+
+
+        QuestionSection qs = new QuestionSection(response);
+        System.out.println(qs.getPointer());
     }
 }
