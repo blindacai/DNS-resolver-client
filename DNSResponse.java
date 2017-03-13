@@ -9,16 +9,7 @@
 
 
 public class DNSResponse {
-    private int queryID;                  // this is for the response it must match the one in the request
-    private int answerCount = 0;          // number of answers  
-    private boolean decoded = false;      // Was this response successfully decoded
-    private int nsCount = 0;              // number of nscount response records
-    private int additionalCount = 0;      // number of additional (alternate) response records
-    private boolean authoritative = false;// Is this an authoritative record
 
-    private int questionCount = 0;
-    private byte[] theResponse;
-    private String recordName = "";
     private int ttl;
     private String recordType;
     private String recordValue;
@@ -58,75 +49,12 @@ public class DNSResponse {
 	}
 
 	public DNSResponse(byte[] data){
-        this.theResponse = data;
+        //this.theResponse = data;
     }
 
-    public int getQueryID(){
-        this.queryID = bitwise(0, 1);
-        return queryID;
-    }
 
-    public int getQDCount(){
-        this.questionCount = bitwise(4, 5);
-        return questionCount;
-    }
 
-    /*
-        an unsigned 16 bit integer specifying the number of
-        resource records in the answer section.
-     */
-    public int getANCount(){
-        this.answerCount = bitwise(6, 7);
-        return answerCount;
-    }
 
-    /*
-        an unsigned 16 bit integer specifying the number of name
-        server resource records in the authority records section.
-     */
-    public int getNsCount(){
-        this.nsCount = bitwise(8, 9);
-        return nsCount;
-    }
-
-    /*
-        an unsigned 16 bit integer specifying the number of
-        resource records in the additional records section.
-     */
-    public int getARCount(){
-        this.additionalCount = bitwise(10, 11);
-        return additionalCount;
-    }
-
-    // will question count be greater than 1?
-    public String getRecordName(){
-        int localhead = 12;
-
-        int num = 0;
-        while(num < this.getQDCount()){
-            while(theResponse[localhead] != 0){
-
-                if(localhead != 12)
-                    this.recordName += ".";
-
-                this.recordName += byteToChar(localhead);
-                localhead += theResponse[localhead] + 1;
-            }
-            num++;
-        }
-
-        this.head = localhead;
-        return this.recordName;
-    }
-
-    // convert byte to ASCII
-    public String byteToChar(int localhead){
-        String result = "";
-        for(int i = 1; i <= theResponse[localhead]; i++){
-            result += (char)theResponse[localhead + i];
-        }
-        return result;
-    }
 
     // You will probably want a methods to extract a compressed FQDN, IP address
     // cname, authoritative DNS servers and other values like the query ID etc.
@@ -138,14 +66,9 @@ public class DNSResponse {
     // these records.
 
 
-    // convert FFFF to unsigned int
-    public int bitwise(int pos_first, int pos_second){
-        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
-    }
-
-    public void formatOutput(){
-        System.out.format(" %-30s %-10d %-4s %s\n", recordName, ttl, recordType, recordValue);
-    }
+//    public void formatOutput(){
+//        System.out.format(" %-30s %-10d %-4s %s\n", recordName, ttl, recordType, recordValue);
+//    }
 }
 
 
