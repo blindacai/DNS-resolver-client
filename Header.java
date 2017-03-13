@@ -15,11 +15,11 @@ public class Header {
 
     public Header(byte[] theResponse){
         this.theResponse = theResponse;
-        this.queryID = bitwise(0, 1);
-        this.questionCount = bitwise(4, 5);
-        this.answerCount = bitwise(6, 7);
-        this.nsCount = bitwise(8, 9);
-        this.additionalCount = bitwise(10, 11);
+        this.queryID = Utils.bitwise(0, 2);
+        this.questionCount = Utils.bitwise(4, 2);
+        this.answerCount = Utils.bitwise(6, 2);
+        this.nsCount = Utils.bitwise(8, 2);
+        this.additionalCount = Utils.bitwise(10, 2);
 
         this.pointer = 12;
     }
@@ -56,10 +56,6 @@ public class Header {
         return additionalCount;
     }
 
-    // convert FFFF to unsigned int
-    public int bitwise(int pos_first, int pos_second){
-        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
-    }
 
     public int getPointer(){
         return this.pointer;

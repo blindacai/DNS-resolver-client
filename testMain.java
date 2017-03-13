@@ -88,6 +88,9 @@ public class testMain {
 //            additionalList.add(resourceRecord);
 //        }
 
+        Header header = new Header(response);
+        System.out.println("Answer count: " + header.getANCount());
+
         QuestionSection qs = new QuestionSection(response);
 
         ResourceRecord rr = new ResourceRecord(response, qs.getPointer());

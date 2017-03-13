@@ -54,7 +54,7 @@ public class Utils {
     }
 
 
-    // convert any length of
+    // convert any length of byte to insigned int
     public static int bitwise(int start_pos, int num){
         if(num == 1){
             return theResponse[start_pos] & 0xff;
