@@ -1,6 +1,4 @@
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.List;
 
 // Lots of the action associated with handling a DNS query is processing
 // the response. Although not required you might find the following skeleton of

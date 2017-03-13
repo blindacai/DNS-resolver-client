@@ -2,11 +2,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by linda on 3/4/2017.
@@ -57,43 +52,45 @@ public class testMain {
 
         QuestionSection questionSection = new QuestionSection(response);
 
-        List<ResourceRecord> answerList = new ArrayList<>();
-        List<ResourceRecord> nameServerList = new ArrayList<>();
-        List<ResourceRecord> additionalList = new ArrayList<>();
-
-        Header myHeader = new Header(response);
-        curPointer = questionSection.getPointer();
-        // store answers
-        System.out.println("start answer");
-        for(int i = 0; i < myHeader.getANCount(); i++){
-            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer+1);
-            curPointer = resourceRecord.getPointer();
-
-            answerList.add(resourceRecord);
-        }
-
-        System.out.println();
-        System.out.println("start NameServer");
-        for(int i = 0; i < myHeader.getNsCount(); i++){
-
-            ResourceRecord resourceRecord = new NameServerResourceRecord(response, curPointer);
-            curPointer = resourceRecord.getPointer();
-
-            nameServerList.add(resourceRecord);
-        }
-
-        System.out.println();
-        System.out.println("start additional");
-        System.out.println(response[65]);
-        System.out.println(response[66]);
-        for(int i = 0; i < myHeader.getARCount(); i++){
-            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
-            curPointer = resourceRecord.getPointer();
-
-            additionalList.add(resourceRecord);
-        }
+//        List<ResourceRecord> answerList = new ArrayList<>();
+//        List<ResourceRecord> nameServerList = new ArrayList<>();
+//        List<ResourceRecord> additionalList = new ArrayList<>();
+//
+//        Header myHeader = new Header(response);
+//        curPointer = questionSection.getPointer();
+//        // store answers
+//        System.out.println("start answer");
+//        for(int i = 0; i < myHeader.getANCount(); i++){
+//            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
+//            curPointer = resourceRecord.getPointer();
+//
+//            answerList.add(resourceRecord);
+//        }
+//
+//        System.out.println();
+//        System.out.println("start NameServer");
+//        for(int i = 0; i < myHeader.getNsCount(); i++){
+//
+//            ResourceRecord resourceRecord = new NameServerResourceRecord(response, curPointer);
+//            curPointer = resourceRecord.getPointer();
+//
+//            nameServerList.add(resourceRecord);
+//        }
+//
+//        System.out.println();
+//        System.out.println("start additional");
+//        System.out.println(response[65]);
+//        System.out.println(response[66]);
+//        for(int i = 0; i < myHeader.getARCount(); i++){
+//            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
+//            curPointer = resourceRecord.getPointer();
+//
+//            additionalList.add(resourceRecord);
+//        }
 
         QuestionSection qs = new QuestionSection(response);
-        System.out.println(qs.getQName());
+
+        ResourceRecord rr = new ResourceRecord(response, qs.getPointer());
+        System.out.format(" %-30s %-10d %-4s %s\n", rr.getRRname(), rr.getRRTTL(), rr.getRRtype(), rr.getRRRdata());
     }
 }

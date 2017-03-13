@@ -53,12 +53,21 @@ public class Utils {
         return result;
     }
 
-    // convert FFFF to unsigned int
-    public static int bitwise(int pos_first, int pos_second){
-        return ((theResponse[pos_first] & 0xff) << 8) + (theResponse[pos_second] & 0xff);
+
+    // convert any length of
+    public static int bitwise(int start_pos, int num){
+        if(num == 1){
+            return theResponse[start_pos] & 0xff;
+        }
+        else{
+            return ((theResponse[start_pos] & 0xff) << (8 * (num - 1))) + bitwise(start_pos + 1, num - 1);
+        }
     }
 
-    public static int singlebitwise(byte[] theResponse, int pos_first){
-        return (theResponse[pos_first] & 255);
+    /*
+        check whether the high order 2 bit is 11
+     */
+    public static boolean checkCompressed(int first_byte){
+        return (first_byte & 0xc0) == 0xc0;
     }
 }

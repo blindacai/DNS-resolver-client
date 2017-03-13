@@ -18,6 +18,7 @@ public class QuestionSection {
 
     public int getPointer(){
         this.head += this.QName.length();
+        this.head += 1;   // get over 00
         this.head += 4;   // get over Qtype and Qclass
 
         return this.head;
