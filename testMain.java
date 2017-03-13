@@ -77,7 +77,7 @@ public class testMain {
         System.out.println("start NameServer");
         for(int i = 0; i < myHeader.getNsCount(); i++){
 
-            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
+            ResourceRecord resourceRecord = new NameServerResourceRecord(response, curPointer);
             curPointer = resourceRecord.getPointer();
 
             nameServerList.add(resourceRecord);
