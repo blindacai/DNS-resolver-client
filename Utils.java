@@ -42,9 +42,8 @@ public class Utils {
         return result;
     }
 
-
     // convert FFFF to unsigned int
     public int bitwise(int pos_first, int pos_second){
-        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
+        return ((theResponse[pos_first] & 0xff) << 8) + (theResponse[pos_second] & 0xff);
     }
 }

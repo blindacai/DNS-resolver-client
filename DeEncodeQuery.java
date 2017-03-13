@@ -8,17 +8,17 @@ import java.util.Random;
 public class DeEncodeQuery {
     // Common starting place for all question queries (minus the QID)
     private byte[] queryHeaders = new byte[]{
-            (byte) 0x00,                                     // QR
-            (byte) 0x00,                                     // RCODE
-            (byte) 0x00, (byte) 0x01,                         // QDCOUNT
+            (byte) 0x00,                                        // QR
+            (byte) 0x00,                                        // RCODE
+            (byte) 0x00, (byte) 0x01,                           // QDCOUNT
             (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, // ANCOUNT
-            (byte) 0x00, (byte) 0x00                          // ARCOUNT
+            (byte) 0x00, (byte) 0x00                            // ARCOUNT
     };
 
     // Seems to have common QTYPE, QCLASS for query questions
     private byte[] queryQTYPEQCLASS = new byte[] {
-            (byte) 0x00, (byte) 0x01,                       // QTYPE
-            (byte) 0x00, (byte) 0x01                        // QCLASS
+            (byte) 0x00, (byte) 0x01,                           // QTYPE
+            (byte) 0x00, (byte) 0x01                            // QCLASS
     };
 
     // Create random byte array of size two for QID
@@ -50,9 +50,6 @@ public class DeEncodeQuery {
     public byte[] queryAssembler(byte[] qname){
         byte[] QID = getQID();
 
-        //test
-        //byte[] QID = new byte[]{(byte)0xbe, (byte)0xbf};
-
         byte[] DNSquery = new byte[QID.length + qname.length + queryHeaders.length + queryQTYPEQCLASS.length];
 
         System.arraycopy(QID, 0, DNSquery, 0, QID.length);
@@ -60,10 +57,6 @@ public class DeEncodeQuery {
         System.arraycopy(qname, 0, DNSquery, QID.length + queryHeaders.length, qname.length);
         System.arraycopy(queryQTYPEQCLASS, 0, DNSquery, QID.length + queryHeaders.length + qname.length,
                 queryQTYPEQCLASS.length);
-
-        // test
-//        System.out.print("QUERY: ");
-//        System.out.println(HexBin.encode(DNSquery));
 
         return DNSquery;
     }

@@ -1,3 +1,6 @@
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 // Lots of the action associated with handling a DNS query is processing
 // the response. Although not required you might find the following skeleton of
@@ -15,10 +18,11 @@ public class DNSResponse {
     private String recordValue;
 
     private int head;      // position of the byte pointer
+    private String compressedFQDNName = "";
 
     // Note you will almost certainly need some additional instance variables.
 
-    // When in trace mode you probably want to dump out all the relevant information in a response
+    // todo: When in trace mode you probably want to dump out all the relevant information in a response
 
 	void dumpResponse() {
 		
@@ -29,24 +33,14 @@ public class DNSResponse {
     // The constructor: you may want to add additional parameters, but the two shown are 
     // probably the minimum that you need.
 
-	public DNSResponse (byte[] data, int len) {
-	    
-	    // The following are probably some of the things 
-	    // you will need to do.
-	    // Extract the query ID
 
-	    // Make sure the message is a query response and determine
-	    // if it is an authoritative response or note
 
-	    // determine answer count
+    // todo: You will probably want a methods to extract a compressed FQDN, IP address
+    // todo: cname, authoritative DNS servers and other values like the query ID etc.
 
-	    // determine NS Count
-
-	    // determine additional record count
-
-	    // Extract list of answers, name server, and additional information response 
-	    // records
-	}
+    public InetAddress getIPaddr(){
+        return null;
+    }
 
 	public DNSResponse(byte[] data){
         //this.theResponse = data;
@@ -64,6 +58,7 @@ public class DNSResponse {
     // the important values they are returning. Note that an IPV6 reponse record
     // is of type 28. It probably wouldn't hurt to have a response record class to hold
     // these records.
+
 
 
 //    public void formatOutput(){
