@@ -26,6 +26,10 @@ public class ResourceRecord {
         setRRRdata();
     }
 
+    public int getPointer(){
+        return RRpointer;
+    }
+
     public void setRRname(){
         RRpointer++;
         if((data[RRpointer] & 0xc0) == 0xc0){
@@ -39,6 +43,9 @@ public class ResourceRecord {
             System.out.println("Name: " + RRname);
 
 
+        } else {
+            System.out.println("didn't make it in");
+            System.out.println(RRpointer);
         }
     }
 
