@@ -1,6 +1,3 @@
-import javax.annotation.Resource;
-import javax.rmi.CORBA.Util;
-
 /**
  * Created by Alex on 2017-03-12.
  */
@@ -12,6 +9,7 @@ public class ResourceRecord {
     int RRRDlength;
     String RRRdata;
     int RRpointer;
+
     byte[] data;
 
     public ResourceRecord(byte[] data, int pointer){
@@ -19,14 +17,11 @@ public class ResourceRecord {
         this.RRpointer = pointer;
         setRRname();
         setRRtype();
-        //setRRclass();
-//        this.RRclass =;
-//        this.RRTTL =;
-//        this.RRRDlength =;
-//        this.RRRdata =;
+        setRRclass();
+        setRRTTL();
+        setRRRDlength();
+        setRRRdata();
     }
-
-
 
     public void setRRname(){
         RRpointer++;
@@ -37,18 +32,54 @@ public class ResourceRecord {
             RRpointer++;
             int pointerLocation = data[RRpointer] | (byte)upperMostOffset;
             System.out.println("compFQDN index: " + pointerLocation);
-            RRname = Utils.getName(data, pointerLocation);
-            RRpointer++;
+            RRname = Utils.getName(pointerLocation);
+            System.out.println("Name: " + RRname);
+
+
         }
     }
 
     public void setRRtype(){
-        this.RRtype = Utils.QTypelookup(Utils.bitwise(data, RRpointer, RRpointer+1));
-        System.out.println("Class: " + RRtype);
+        RRpointer++;
+        this.RRtype = Utils.QTypelookup(Utils.bitwise(RRpointer, RRpointer+1));
+        System.out.println("Type: " + RRtype);
+        RRpointer++;
+
     }
 
+    public void setRRclass(){
+        RRpointer++;
+        this.RRclass = Utils.QClasslookup(Utils.bitwise(RRpointer, RRpointer+1));
+        System.out.println("Class: " + RRclass);
+        RRpointer++;
+    }
 
+    public void setRRTTL(){
+        RRpointer++;
+        int upperBits = Utils.bitwise(RRpointer, RRpointer+1) << 8;
+        RRpointer+=2;
+        RRTTL = upperBits | Utils.bitwise(RRpointer, RRpointer+1);
+        System.out.println("TTL: " + RRTTL);
+        RRpointer++;
+    }
 
+    public void setRRRDlength(){
+        RRpointer++;
+        this.RRRDlength = Utils.bitwise(RRpointer, RRpointer+1);
+        System.out.println("RDlength: " + RRRDlength);
+        RRpointer++;
+    }
 
-
+    public void setRRRdata(){
+        RRpointer++;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i<RRRDlength; i++){
+            sb.append(Utils.singlebitwise(data, RRpointer));
+            sb.append(".");
+            RRpointer++;
+        }
+        sb.deleteCharAt(sb.length()-1);
+        RRRdata = sb.toString();
+        System.out.println("Address: " + RRRdata);
+    }
 }

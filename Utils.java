@@ -18,6 +18,15 @@ public class Utils {
         return null;
     }
 
+
+    public static String QClasslookup(int type){
+        switch(type){
+            case 1:
+                return "IN";
+        }
+        return null;
+    }
+
     public static String getName(int pointer){
         String result = "";
 
@@ -43,7 +52,11 @@ public class Utils {
     }
 
     // convert FFFF to unsigned int
-    public int bitwise(int pos_first, int pos_second){
+    public static int bitwise(int pos_first, int pos_second){
         return ((theResponse[pos_first] & 0xff) << 8) + (theResponse[pos_second] & 0xff);
+    }
+
+    public static int singlebitwise(byte[] theResponse, int pos_first){
+        return (theResponse[pos_first] & 255);
     }
 }
