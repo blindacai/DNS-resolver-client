@@ -9,7 +9,7 @@ public class QuestionSection {
 
     public QuestionSection(byte[] theResponse){
         this.theResponse = theResponse;
-        this.QName = Utils.getName(theResponse, head);
+        this.QName = Utils.getName(head);
     }
 
     public String getQName(){
@@ -21,6 +21,7 @@ public class QuestionSection {
         this.head += 4;   // get over Qtype and Qclass
 
         return this.head;
+
     }
 }
 

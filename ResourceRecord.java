@@ -1,6 +1,3 @@
-import javax.annotation.Resource;
-import javax.rmi.CORBA.Util;
-
 /**
  * Created by Alex on 2017-03-12.
  */
@@ -39,7 +36,7 @@ public class ResourceRecord {
             RRpointer++;
             int pointerLocation = data[RRpointer] | (byte)upperMostOffset;
             System.out.println("compFQDN index: " + pointerLocation);
-            RRname = Utils.getName(data, pointerLocation);
+            RRname = Utils.getName(pointerLocation);
             System.out.println("Name: " + RRname);
         } else {
             System.out.println("didn't make it in");
@@ -49,7 +46,7 @@ public class ResourceRecord {
 
     public void setRRtype(){
         RRpointer++;
-        this.RRtype = Utils.QTypelookup(Utils.bitwise(data, RRpointer, RRpointer+1));
+        this.RRtype = Utils.QTypelookup(Utils.bitwise(RRpointer, RRpointer+1));
         System.out.println("Type: " + RRtype);
         RRpointer++;
 
@@ -57,23 +54,23 @@ public class ResourceRecord {
 
     public void setRRclass(){
         RRpointer++;
-        this.RRclass = Utils.QClasslookup(Utils.bitwise(data, RRpointer, RRpointer+1));
+        this.RRclass = Utils.QClasslookup(Utils.bitwise(RRpointer, RRpointer+1));
         System.out.println("Class: " + RRclass);
         RRpointer++;
     }
 
     public void setRRTTL(){
         RRpointer++;
-        int upperBits = Utils.bitwise(data, RRpointer, RRpointer+1) << 8;
+        int upperBits = Utils.bitwise(RRpointer, RRpointer+1) << 8;
         RRpointer+=2;
-        RRTTL = upperBits | Utils.bitwise(data, RRpointer, RRpointer+1);
+        RRTTL = upperBits | Utils.bitwise(RRpointer, RRpointer+1);
         System.out.println("TTL: " + RRTTL);
         RRpointer++;
     }
 
     public void setRRRDlength(){
         RRpointer++;
-        this.RRRDlength = Utils.bitwise(data, RRpointer, RRpointer+1);
+        this.RRRDlength = Utils.bitwise(RRpointer, RRpointer+1);
         System.out.println("RDlength: " + RRRDlength);
         RRpointer++;
     }
