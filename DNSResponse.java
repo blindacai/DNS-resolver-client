@@ -1,4 +1,6 @@
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 
 // Lots of the action associated with handling a DNS query is processing
 // the response. Although not required you might find the following skeleton of
@@ -25,6 +27,7 @@ public class DNSResponse {
     private String recordValue;
 
     private int head;      // position of the byte pointer
+    private String compressedFQDNName = "";
 
     // Note you will almost certainly need some additional instance variables.
 
@@ -41,28 +44,39 @@ public class DNSResponse {
 
 	public DNSResponse (byte[] data, int len) {
         this.theResponse = data;
-	    // The following are probably some of the things 
-	    // you will need to do.
-	    // Extract the query ID
+        // The following are probably some of the things
+        // you will need to do.
+        // Extract the query ID
         this.queryID = getQueryID();
-	    // Make sure the message is a query response and determine
-        if((data[2] & 0x80) != 0x80){ return; }               // ensure QR bit is 1 (response)
+        // Make sure the message is a query response and determine
+        if ((data[2] & 0x80) != 0x80) {
+            return;
+        }               // ensure QR bit is 1 (response)
         // if it is an authoritative response or note
-        if((data[2] & 0x04) != 0){ authoritative = true; } // check if AA bit set to 1 (authoritative)
-        if((data[3] & 0xff) != 0){ return; }                // check if RCODE is 0 (no error in response code)
+        if ((data[2] & 0x04) != 0) {
+            authoritative = true;
+        } // check if AA bit set to 1 (authoritative)
+        if ((data[3] & 0xff) != 0) {
+            return;
+        }                // check if RCODE is 0 (no error in response code)
 
-	    // determine answer count
+        // determine answer count
         answerCount = getANCount();
 
-	    // determine NS Count
+        // determine NS Count
         nsCount = getNsCount();
 
-	    // determine additional record count
+        // determine additional record count
         additionalCount = getARCount();
 
-	    // todo: Extract list of answers, name server, and additional information response
-	    // records
-	}
+        // todo: Extract list of answers, name server, and additional information response
+        // records
+        for (int i = 0; i < answerCount; i++) {
+            ResourceRecord answerRecord = new ResourceRecord(theResponse, head);
+            head += 16;
+        }
+
+    }
 
 	public DNSResponse(byte[] data){
     }
@@ -70,9 +84,6 @@ public class DNSResponse {
 
     // todo: You will probably want a methods to extract a compressed FQDN, IP address
     // todo: cname, authoritative DNS servers and other values like the query ID etc.
-    public String getCompressedFQDN(){
-        return "";
-    }
 
     public InetAddress getIPaddr(){
         return null;
@@ -121,6 +132,25 @@ public class DNSResponse {
     public int getARCount(){
         this.additionalCount = bitwise(10, 11);
         return additionalCount;
+    }
+
+    public String getCompressedFQDN(int startOffset){
+        int localhead = startOffset;
+
+        int num = 0;
+        while(num < this.getQDCount()){
+            while(theResponse[localhead] != 0){
+
+                if(localhead != startOffset)
+                    this.compressedFQDNName += ".";
+
+                this.compressedFQDNName += byteToChar(localhead);
+                localhead += theResponse[localhead] + 1;
+            }
+            num++;
+        }
+
+        return this.compressedFQDNName;
     }
 
     // will question count be greater than 1?

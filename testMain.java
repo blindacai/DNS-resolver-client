@@ -49,6 +49,7 @@ public class testMain {
         }
 
         System.out.println('\n');
+        System.out.println(dns_response.getCompressedFQDN(29));
         System.out.println(dns_response.getRecordName());
     }
 }
