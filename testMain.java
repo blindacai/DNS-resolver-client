@@ -47,6 +47,8 @@ public class testMain {
         while((reader = readbyte.read())!= -1){
             System.out.println(Integer.toHexString(reader));
         }
-        System.out.println("end of main");
+
+        System.out.println('\n');
+        System.out.println(dns_response.getRecordName());
     }
 }

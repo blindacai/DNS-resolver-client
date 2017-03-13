@@ -17,8 +17,14 @@ public class DNSResponse {
     private int additionalCount = 0;      // number of additional (alternate) response records
     private boolean authoritative = false;// Is this an authoritative record
 
-
+    private int questionCount = 0;
     private byte[] theResponse;
+    private String recordName = "";
+    private int ttl;
+    private String recordType;
+    private String recordValue;
+
+    private int head;      // position of the byte pointer
 
     // Note you will almost certainly need some additional instance variables.
 
@@ -85,6 +91,11 @@ public class DNSResponse {
         return queryID;
     }
 
+    public int getQDCount(){
+        this.questionCount = bitwise(4, 5);
+        return questionCount;
+    }
+
     /*
         an unsigned 16 bit integer specifying the number of
         resource records in the answer section.
@@ -112,7 +123,40 @@ public class DNSResponse {
         return additionalCount;
     }
 
-    // todo:
+    // will question count be greater than 1?
+    public String getRecordName(){
+        int localhead = 12;
+
+        int num = 0;
+        while(num < this.getQDCount()){
+            while(theResponse[localhead] != 0){
+
+                if(localhead != 12)
+                    this.recordName += ".";
+
+                this.recordName += byteToChar(localhead);
+                localhead += theResponse[localhead] + 1;
+            }
+            num++;
+        }
+
+        this.head = localhead;
+        return this.recordName;
+    }
+
+    // convert byte to ASCII
+    public String byteToChar(int localhead){
+        String result = "";
+        for(int i = 1; i <= theResponse[localhead]; i++){
+            result += (char)theResponse[localhead + i];
+        }
+        return result;
+    }
+
+    // You will probably want a methods to extract a compressed FQDN, IP address
+    // cname, authoritative DNS servers and other values like the query ID etc.
+
+
     // You will also want methods to extract the response records and record
     // the important values they are returning. Note that an IPV6 reponse record
     // is of type 28. It probably wouldn't hurt to have a response record class to hold
@@ -122,6 +166,10 @@ public class DNSResponse {
     // convert FFFF to unsigned int
     public int bitwise(int pos_first, int pos_second){
         return ((theResponse[pos_first] & 0xff) << 8) + (theResponse[pos_second] & 0xff);
+    }
+
+    public void formatOutput(){
+        System.out.format(" %-30s %-10d %-4s %s\n", recordName, ttl, recordType, recordValue);
     }
 }
 
