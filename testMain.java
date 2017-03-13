@@ -1,4 +1,3 @@
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -39,20 +38,22 @@ public class testMain {
 
         byte[] response = packet.getData();
         DNSResponse dns_response = new DNSResponse(response);
+        Utils.setReponse(response);
 
-        //System.out.println(dns_response.getANCount());
 
-        ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
-        int reader;
-        while((reader = readbyte.read())!= -1){
-            System.out.print(Integer.toHexString(reader));
-        }
-
-        System.out.println('\n');
-        //System.out.println(dns_response.getRecordName());
+//        //System.out.println(dns_response.getANCount());
+//
+//        ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
+//        int reader;
+//        while((reader = readbyte.read())!= -1){
+//            System.out.print(Integer.toHexString(reader));
+//        }
+//
+//        System.out.println('\n');
+//        //System.out.println(dns_response.getRecordName());
 
 
         QuestionSection qs = new QuestionSection(response);
-        System.out.println(qs.getPointer());
+        System.out.println(qs.getQName());
     }
 }

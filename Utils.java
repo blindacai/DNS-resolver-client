@@ -2,6 +2,11 @@
  * Created by linda on 3/12/2017.
  */
 public class Utils {
+    private static byte[] theResponse;
+
+    public static void setReponse(byte[] response){
+        theResponse = response;
+    }
 
     public static String QTypelookup(int type){
         switch(type){
@@ -13,7 +18,7 @@ public class Utils {
         return null;
     }
 
-    public static String getName(byte[] theResponse, int pointer){
+    public static String getName(int pointer){
         String result = "";
 
         int localhead = pointer;
@@ -22,18 +27,24 @@ public class Utils {
             if(localhead != pointer)
                 result += ".";
 
-            result += byteToChar(theResponse, localhead);
+            result += byteToChar(localhead);
             localhead += theResponse[localhead] + 1;
         }
         return result;
     }
 
     // convert byte to ASCII
-    public static String byteToChar(byte[] theResponse, int pointer){
+    public static String byteToChar(int pointer){
         String result = "";
         for(int i = 1; i <= theResponse[pointer]; i++){
             result += (char)theResponse[pointer + i];
         }
         return result;
+    }
+
+
+    // convert FFFF to unsigned int
+    public int bitwise(int pos_first, int pos_second){
+        return ((theResponse[pos_first] & 255) << 8) + (theResponse[pos_second] & 255);
     }
 }
