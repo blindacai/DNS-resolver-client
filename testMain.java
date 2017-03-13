@@ -61,6 +61,7 @@ public class testMain {
         List<ResourceRecord> nameServerList = new ArrayList<>();
         List<ResourceRecord> additionalList = new ArrayList<>();
 
+        Header myHeader = new Header(response);
         curPointer = questionSection.getPointer();
         // store answers
         System.out.println("start answer");
@@ -83,6 +84,8 @@ public class testMain {
 
         System.out.println();
         System.out.println("start additional");
+        System.out.println(response[65]);
+        System.out.println(response[66]);
         for(int i = 0; i < myHeader.getARCount(); i++){
             ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
             curPointer = resourceRecord.getPointer();

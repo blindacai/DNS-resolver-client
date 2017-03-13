@@ -14,13 +14,13 @@ public class NameServerResourceRecord extends ResourceRecord {
             if((data[RRpointer] & 0xc0) == 0xc0){
                 RRpointer++;
                 sb.append(".");
-                sb.append(Utils.getName(data, data[RRpointer]));
+                sb.append(Utils.getName(data[RRpointer]));
                 RRpointer++;
                 break;
 
             } else {
                 RRpointer++;
-                sb.append(Utils.byteToChar(data, RRpointer-3));
+                sb.append(Utils.byteToChar(RRpointer-3));
                 RRpointer++;
             }
         }
