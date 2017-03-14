@@ -10,8 +10,8 @@ public class testMain {
     //public static final String PATH = "C:\\Users\\Alex\\Desktop\\CS317\\New folder (2)\\DNSInitialQuery.bin";
     public static final String PATH = "D:\\UBC\\2016 term 2\\cpsc 317\\assignment\\a2\\DNSInitialQuery.bin";
     public static final String DNS = "198.162.35.1";
-    public static final int MAX_LEN = 512;
-    public static String FQDN = "www.ugrad.cs.ubc.ca";
+    public static final int MAX_LEN = 1024;
+    public static String FQDN = "www.cs.ubc.ca";
 
     private static int curPointer;
 

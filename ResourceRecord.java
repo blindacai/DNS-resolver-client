@@ -30,7 +30,7 @@ public class ResourceRecord {
     // how to move forward pointer
     public void setRRname(){
         this.RRname = Utils.getRRName(RRpointer);
-        RRpointer += 2;
+        RRpointer += Utils.getNameLength(RRpointer);
     }
 
     public void setRRtype(){

@@ -28,24 +28,7 @@ public class Utils {
         }
         return null;
     }
-
-
-//    public static String getName(int pointer){
-//        String result = "";
-//        int bytevalue = theResponse[pointer];
-//
-//        if(theResponse[pointer] == 0){
-//            return "";
-//        }
-//        else{
-//            if(Utils.checkCompressed(pointer)){
-//                return result += getName(extractPos(pointer));
-//            }
-//            else{
-//                return result += Utils.byteToChar(pointer) + "." + getName(pointer + bytevalue + 1);
-//            }
-//        }
-//    }
+    
 
 
     /*
@@ -114,6 +97,25 @@ public class Utils {
     }
 
     /*
+        get byte length of name section
+     */
+    public static int getNameLength(int pointer){
+        int result = 0;
+
+        while(theResponse[pointer] != 0){
+            if(checkCompressed(pointer)){
+                result += 2;
+                return result;
+            }
+            else{
+                result += 1;
+                pointer += 1;
+            }
+        }
+        return result;
+    }
+
+    /*
         check whether the high order 2 bit is 11
      */
     public static boolean checkCompressed(int first_byte){
@@ -128,7 +130,7 @@ public class Utils {
     }
 
     /*
-        for testing
+        for testing purpose
      */
     public static String byteLookup(int position){
         return Integer.toHexString(theResponse[position] & 0xff);
