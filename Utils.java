@@ -149,4 +149,8 @@ public class Utils {
     public static String byteLookup(int position){
         return Integer.toHexString(theResponse[position] & 0xff);
     }
+
+    public static void toPrint(ResourceRecord rr){
+        System.out.format(" %-30s %-10d %-4s %s\n", rr.getRRname(), rr.getRRTTL(), rr.getRRtype(), rr.getRRRdata());
+    }
 }

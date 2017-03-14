@@ -52,22 +52,22 @@ public class testMain {
         // Answers
         System.out.println("Answers: " + header.getANCount());
         ResourceRecord answer = new ResourceRecord(response, pointer_pos, false);
-        System.out.format(" %-30s %-10d %-4s %s\n", answer.getRRname(), answer.getRRTTL(), answer.getRRtype(), answer.getRRRdata());
+        Utils.toPrint(answer);
         pointer_pos = answer.getPointer();
 
         // Authoritative
         System.out.println("Nameservers: " + header.getNsCount());
         for(int i = 0; i < header.getNsCount(); i++){
             ResourceRecord nameServer = new ResourceRecord(response, pointer_pos, true);
-            System.out.format(" %-30s %-10d %-4s %s\n", nameServer.getRRname(), nameServer.getRRTTL(), nameServer.getRRtype(), nameServer.getRRRdata());
+            Utils.toPrint(nameServer);
             pointer_pos = nameServer.getPointer();
         }
-        
+
         // Additional
         System.out.println("Additional: " + header.getARCount());
         for(int i = 0; i < header.getARCount(); i++){
             ResourceRecord additional = new ResourceRecord(response, pointer_pos, false);
-            System.out.format(" %-30s %-10d %-4s %s\n", additional.getRRname(), additional.getRRTTL(), additional.getRRtype(), additional.getRRRdata());
+            Utils.toPrint(additional);
             pointer_pos = additional.getPointer();
         }
 
