@@ -27,14 +27,9 @@ public class ResourceRecord {
         return RRpointer;
     }
 
+    // how to move forward pointer
     public void setRRname(){
-        if(Utils.checkCompressed(data[RRpointer])){
-            int pointerLocation = Utils.bitwise(RRpointer, 2) & 0x3fff;
-            this.RRname = Utils.getName(pointerLocation);
-        }else{
-            System.out.println("didn't make it in");
-            System.out.println(RRpointer);
-        }
+        this.RRname = Utils.getName(RRpointer);
         RRpointer += 2;
     }
 

@@ -50,7 +50,7 @@ public class testMain {
 //        System.out.println('\n');
 //        //System.out.println(dns_response.getRecordName());
 
-        QuestionSection questionSection = new QuestionSection(response);
+       // QuestionSection questionSection = new QuestionSection(response);
 
 //        List<ResourceRecord> answerList = new ArrayList<>();
 //        List<ResourceRecord> nameServerList = new ArrayList<>();
@@ -88,12 +88,21 @@ public class testMain {
 //            additionalList.add(resourceRecord);
 //        }
 
+
+
         Header header = new Header(response);
         System.out.println("Answer count: " + header.getANCount());
 
         QuestionSection qs = new QuestionSection(response);
 
         ResourceRecord rr = new ResourceRecord(response, qs.getPointer());
+        //System.out.println(rr.getRRname());
         System.out.format(" %-30s %-10d %-4s %s\n", rr.getRRname(), rr.getRRTTL(), rr.getRRtype(), rr.getRRRdata());
+
+
+
+//        System.out.println(Utils.byteLookup(89));
+//        theName testing = new theName(response, 37);
+//        System.out.println(Utils.getName(89));
     }
 }

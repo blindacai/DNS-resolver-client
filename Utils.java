@@ -29,22 +29,30 @@ public class Utils {
         return null;
     }
 
-    public static String getName(int pointer){
+
+    public static String getRRName(int pointer){
         String result = "";
+        int bytevalue = theResponse[pointer];
 
-        int localhead = pointer;
-
-        while(theResponse[localhead] != 0){
-            if(localhead != pointer)
-                result += ".";
-
-            result += byteToChar(localhead);
-            localhead += theResponse[localhead] + 1;
+        if(theResponse[pointer] == 0){
+            return "";
         }
-        return result;
+        else{
+            if(Utils.checkCompressed(pointer)){
+                return result += getRRName(Utils.extractPos(pointer));
+            }
+            else{
+                return result += Utils.byteToChar(pointer) + "." + getRRName(pointer + bytevalue + 1);
+            }
+        }
     }
 
-    // convert byte to ASCII
+    public static String getName(int pointer){
+        String result = getRRName(pointer);
+        return result.substring(0, result.length() - 1);
+    }
+
+    // convert bytes to ASCII based on the value of theResponse[pointer]
     public static String byteToChar(int pointer){
         String result = "";
         for(int i = 1; i <= theResponse[pointer]; i++){
@@ -68,6 +76,20 @@ public class Utils {
         check whether the high order 2 bit is 11
      */
     public static boolean checkCompressed(int first_byte){
-        return (first_byte & 0xc0) == 0xc0;
+        return (theResponse[first_byte] & 0xc0) == 0xc0;
+    }
+
+    /*
+        extract position of the compressed message
+     */
+    public static int extractPos(int first_byte){
+        return bitwise(first_byte, 2) & 0x3fff;
+    }
+
+    /*
+        for testing
+     */
+    public static String byteLookup(int position){
+        return Integer.toHexString(theResponse[position] & 0xff);
     }
 }
