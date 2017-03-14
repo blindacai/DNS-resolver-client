@@ -39,33 +39,37 @@ public class testMain {
         DNSResponse dns_response = new DNSResponse(response);
         Utils.setReponse(response);
 
+
+        int pointer_pos;
+
         Header header = new Header(response);
         System.out.println("Response ID: " + header.getQueryID());
 
         // Queries
         QuerySection qs = new QuerySection(response);
+        pointer_pos = qs.getPointer();
 
         // Answers
         System.out.println("Answers: " + header.getANCount());
-        ResourceRecord answer = new ResourceRecord(response, qs.getPointer(), false);
-        //System.out.println("data: " + answer.getRRRdata());
+        ResourceRecord answer = new ResourceRecord(response, pointer_pos, false);
         System.out.format(" %-30s %-10d %-4s %s\n", answer.getRRname(), answer.getRRTTL(), answer.getRRtype(), answer.getRRRdata());
-
+        pointer_pos = answer.getPointer();
 
         // Authoritative
         System.out.println("Nameservers: " + header.getNsCount());
-        ResourceRecord ns_one = new ResourceRecord(response, answer.getPointer(), true);
-        System.out.format(" %-30s %-10d %-4s %s\n", ns_one.getRRname(), ns_one.getRRTTL(), ns_one.getRRtype(), ns_one.getRRRdata());
-        ResourceRecord ns_two = new ResourceRecord(response, ns_one.getPointer(), true);
-        System.out.format(" %-30s %-10d %-4s %s\n", ns_two.getRRname(), ns_two.getRRTTL(), ns_two.getRRtype(), ns_two.getRRRdata());
-
+        for(int i = 0; i < header.getNsCount(); i++){
+            ResourceRecord nameServer = new ResourceRecord(response, pointer_pos, true);
+            System.out.format(" %-30s %-10d %-4s %s\n", nameServer.getRRname(), nameServer.getRRTTL(), nameServer.getRRtype(), nameServer.getRRRdata());
+            pointer_pos = nameServer.getPointer();
+        }
+        
         // Additional
         System.out.println("Additional: " + header.getARCount());
-        ResourceRecord add_one = new ResourceRecord(response, ns_two.getPointer(), false);
-        System.out.format(" %-30s %-10d %-4s %s\n", add_one.getRRname(), add_one.getRRTTL(), add_one.getRRtype(), add_one.getRRRdata());
-        ResourceRecord add_two = new ResourceRecord(response, add_one.getPointer(), false);
-        System.out.format(" %-30s %-10d %-4s %s\n", add_two.getRRname(), add_two.getRRTTL(), add_two.getRRtype(), add_two.getRRRdata());
-
+        for(int i = 0; i < header.getARCount(); i++){
+            ResourceRecord additional = new ResourceRecord(response, pointer_pos, false);
+            System.out.format(" %-30s %-10d %-4s %s\n", additional.getRRname(), additional.getRRTTL(), additional.getRRtype(), additional.getRRRdata());
+            pointer_pos = additional.getPointer();
+        }
 
 
 //        System.out.println(Utils.byteLookup(89));
