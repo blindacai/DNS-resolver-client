@@ -39,70 +39,37 @@ public class testMain {
         DNSResponse dns_response = new DNSResponse(response);
         Utils.setReponse(response);
 
-//        //System.out.println(dns_response.getANCount());
-//
-//        ByteArrayInputStream readbyte = new ByteArrayInputStream(response);
-//        int reader;
-//        while((reader = readbyte.read())!= -1){
-//            System.out.print(Integer.toHexString(reader));
-//        }
-//
-//        System.out.println('\n');
-//        //System.out.println(dns_response.getRecordName());
-
-       // QuestionSection questionSection = new QuestionSection(response);
-
-//        List<ResourceRecord> answerList = new ArrayList<>();
-//        List<ResourceRecord> nameServerList = new ArrayList<>();
-//        List<ResourceRecord> additionalList = new ArrayList<>();
-//
-//        Header myHeader = new Header(response);
-//        curPointer = questionSection.getPointer();
-//        // store answers
-//        System.out.println("start answer");
-//        for(int i = 0; i < myHeader.getANCount(); i++){
-//            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
-//            curPointer = resourceRecord.getPointer();
-//
-//            answerList.add(resourceRecord);
-//        }
-//
-//        System.out.println();
-//        System.out.println("start NameServer");
-//        for(int i = 0; i < myHeader.getNsCount(); i++){
-//
-//            ResourceRecord resourceRecord = new NameServerResourceRecord(response, curPointer);
-//            curPointer = resourceRecord.getPointer();
-//
-//            nameServerList.add(resourceRecord);
-//        }
-//
-//        System.out.println();
-//        System.out.println("start additional");
-//        System.out.println(response[65]);
-//        System.out.println(response[66]);
-//        for(int i = 0; i < myHeader.getARCount(); i++){
-//            ResourceRecord resourceRecord = new ResourceRecord(response, curPointer);
-//            curPointer = resourceRecord.getPointer();
-//
-//            additionalList.add(resourceRecord);
-//        }
-
-
-
         Header header = new Header(response);
-        System.out.println("Answer count: " + header.getANCount());
+        System.out.println("Response ID: " + header.getQueryID());
 
-        QuestionSection qs = new QuestionSection(response);
+        // Queries
+        QuerySection qs = new QuerySection(response);
 
-        ResourceRecord rr = new ResourceRecord(response, qs.getPointer());
-        //System.out.println(rr.getRRname());
-        System.out.format(" %-30s %-10d %-4s %s\n", rr.getRRname(), rr.getRRTTL(), rr.getRRtype(), rr.getRRRdata());
+        // Answers
+        System.out.println("Answers: " + header.getANCount());
+        ResourceRecord answer = new ResourceRecord(response, qs.getPointer(), false);
+        //System.out.println("data: " + answer.getRRRdata());
+        System.out.format(" %-30s %-10d %-4s %s\n", answer.getRRname(), answer.getRRTTL(), answer.getRRtype(), answer.getRRRdata());
 
+
+        // Authoritative
+        System.out.println("Nameservers: " + header.getNsCount());
+        ResourceRecord ns_one = new ResourceRecord(response, answer.getPointer(), true);
+        System.out.format(" %-30s %-10d %-4s %s\n", ns_one.getRRname(), ns_one.getRRTTL(), ns_one.getRRtype(), ns_one.getRRRdata());
+        ResourceRecord ns_two = new ResourceRecord(response, ns_one.getPointer(), true);
+        System.out.format(" %-30s %-10d %-4s %s\n", ns_two.getRRname(), ns_two.getRRTTL(), ns_two.getRRtype(), ns_two.getRRRdata());
+
+        // Additional
+        System.out.println("Additional: " + header.getARCount());
+        ResourceRecord add_one = new ResourceRecord(response, ns_two.getPointer(), false);
+        System.out.format(" %-30s %-10d %-4s %s\n", add_one.getRRname(), add_one.getRRTTL(), add_one.getRRtype(), add_one.getRRRdata());
+        ResourceRecord add_two = new ResourceRecord(response, add_one.getPointer(), false);
+        System.out.format(" %-30s %-10d %-4s %s\n", add_two.getRRname(), add_two.getRRTTL(), add_two.getRRtype(), add_two.getRRRdata());
 
 
 
 //        System.out.println(Utils.byteLookup(89));
 //        System.out.println(Utils.getRDataNS(89, 6));
+//        System.out.println(Utils.byteLookup(answer.getPointer()));
     }
 }

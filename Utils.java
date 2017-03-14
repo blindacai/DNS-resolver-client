@@ -28,7 +28,7 @@ public class Utils {
         }
         return null;
     }
-    
+
 
 
     /*
@@ -41,7 +41,7 @@ public class Utils {
         if(theResponse[pointer] == 0){
             return "";
         }
-        if(length == 0){
+        if(length == 0 && !inCompressed){
             return "";
         }
         else{
@@ -72,6 +72,20 @@ public class Utils {
      */
     public static String getRDataNS(int pointer, int length){
         String result = getName(pointer, false, length);
+        return result.substring(0, result.length() - 1);
+    }
+
+    /*
+        get RData section when type is A or AAAA
+     */
+    public static String getRDataIP(int length, int pointer){
+        String result = "";
+
+        for(int i = 0; i < length; i++){
+            result += (theResponse[pointer] & 0xff) + ".";
+            pointer += 1;
+        }
+
         return result.substring(0, result.length() - 1);
     }
 

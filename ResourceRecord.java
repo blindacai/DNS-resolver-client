@@ -10,11 +10,14 @@ public class ResourceRecord {
     private String RRRdata;
     private int RRpointer;
 
-    private byte[] data;
+    private boolean nameServer;
 
-    public ResourceRecord(byte[] data, int pointer){
-        this.data = data;
-        this.RRpointer = pointer + 1;
+    private byte[] response;
+
+    public ResourceRecord(byte[] data, int pointer, boolean nameServer){
+        this.response = data;
+        this.RRpointer = pointer;
+        this.nameServer = nameServer;
         setRRname();
         setRRtype();
         setRRclass();
@@ -54,7 +57,7 @@ public class ResourceRecord {
     }
 
     public void setRRRdata(){
-        this.RRRdata = Utils.byteToChar(RRpointer);
+        this.RRRdata = nameServer? Utils.getRDataNS(RRpointer, RRRDlength) : Utils.getRDataIP(RRRDlength, RRpointer);
         RRpointer += RRRDlength;
     }
 
@@ -87,7 +90,7 @@ public class ResourceRecord {
         return RRpointer;
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getResponse() {
+        return response;
     }
 }
