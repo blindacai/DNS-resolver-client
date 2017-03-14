@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 /**
  * Created by linda on 3/4/2017.
@@ -12,33 +9,36 @@ public class testMain {
     public static final String DNS = "198.162.35.1";
     public static final int MAX_LEN = 1024;
     public static String FQDN = "www.cs.ubc.ca";
+    //public static String FQDN = "www.stanford.edu";
 
-    private static int curPointer;
+    //private static int curPointer;
 
     public static void main(String[] args) throws IOException {
-        DatagramSocket clientSocket = new DatagramSocket();
-        InetAddress address = InetAddress.getByName(DNS);
+//        DatagramSocket clientSocket = new DatagramSocket();
+//        InetAddress address = InetAddress.getByName(DNS);
+//
+//        DeEncodeQuery encoder = new DeEncodeQuery();
+//
+//        byte[] DNSquery = encoder.enCodeFQDN(FQDN);
+//
+//
+////        Path path = Paths.get(PATH);
+////        byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
+//
+//        DatagramPacket packet = new DatagramPacket(DNSquery, DNSquery.length, address, 53);
+//        clientSocket.send(packet);
+//
+//        // to receive a response
+//        byte[] buftwo = new byte[MAX_LEN];
+//        packet = new DatagramPacket(buftwo, buftwo.length);
+//        clientSocket.receive(packet);
+//
+//        byte[] response = packet.getData();
+//        DNSResponse_org dns_response = new DNSResponse_org(response);
+//        Utils.setReponse(response);
 
-        DeEncodeQuery decoder = new DeEncodeQuery();
-
-        byte[] DNSquery = decoder.enCodeFQDN(FQDN);
-
-
-//        Path path = Paths.get(PATH);
-//        byte[] buf = Files.readAllBytes(path);  // to be replaced by encoded user input
-
-        DatagramPacket packet = new DatagramPacket(DNSquery, DNSquery.length, address, 53);
-        clientSocket.send(packet);
-
-        // to receive a response
-        byte[] buftwo = new byte[MAX_LEN];
-        packet = new DatagramPacket(buftwo, buftwo.length);
-        clientSocket.receive(packet);
-
-        byte[] response = packet.getData();
-        DNSResponse dns_response = new DNSResponse(response);
-        Utils.setReponse(response);
-
+        Datagram datagram = new Datagram(DNS, FQDN);
+        byte[] response = datagram.getReponse();
 
         int pointer_pos;
 
@@ -80,3 +80,10 @@ public class testMain {
 //        System.out.println(Utils.byteLookup(answer.getPointer()));
     }
 }
+
+
+// should we look up for IP of NS in additional info section?
+// should we exhaust all NS, if we couldn't find IP of some of them?
+// what's the purpose of boolean field: uthoritative
+// what's the purpose of boolean field: decoded
+// cname: authoritative true, either there is an IP or is the cname

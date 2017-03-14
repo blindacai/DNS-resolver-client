@@ -29,7 +29,7 @@ public class ResourceRecord {
     public int getPointer(){
         return RRpointer;
     }
-    
+
     public void setRRname(){
         this.RRname = Utils.getRRName(RRpointer);
         RRpointer += Utils.getNameLength(RRpointer);

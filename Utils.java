@@ -3,6 +3,7 @@
  */
 public class Utils {
     private static byte[] theResponse;
+    public static final int MAX_LEN = 1024;
 
     public static void setReponse(byte[] response){
         theResponse = response;
@@ -16,6 +17,10 @@ public class Utils {
                 return "NS";
             case 28:
                 return "AAAA";
+            case 5:
+                return "CN";
+            case 6:
+                return "SOA";
         }
         return null;
     }
@@ -28,7 +33,6 @@ public class Utils {
         }
         return null;
     }
-
 
 
     /*
@@ -85,7 +89,6 @@ public class Utils {
             result += (theResponse[pointer] & 0xff) + ".";
             pointer += 1;
         }
-
         return result.substring(0, result.length() - 1);
     }
 

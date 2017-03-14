@@ -1,7 +1,5 @@
 
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Random;
 
 /**
  * 
@@ -23,7 +21,7 @@ public class DNSlookup {
      */
     public static void main(String[] args) throws Exception {
 	String fqdn;
-	DNSResponse response; // Just to force compilation
+	DNSResponse_org response; // Just to force compilation
 	int argCount = args.length;
 	boolean tracingOn = false;
 	boolean IPV6Query = false;
