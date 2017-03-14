@@ -101,8 +101,8 @@ public class testMain {
 
 
 
+
 //        System.out.println(Utils.byteLookup(89));
-//        theName testing = new theName(response, 37);
-//        System.out.println(Utils.getName(89));
+//        System.out.println(Utils.getRDataNS(89, 6));
     }
 }

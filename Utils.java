@@ -30,27 +30,68 @@ public class Utils {
     }
 
 
-    public static String getRRName(int pointer){
+//    public static String getName(int pointer){
+//        String result = "";
+//        int bytevalue = theResponse[pointer];
+//
+//        if(theResponse[pointer] == 0){
+//            return "";
+//        }
+//        else{
+//            if(Utils.checkCompressed(pointer)){
+//                return result += getName(extractPos(pointer));
+//            }
+//            else{
+//                return result += Utils.byteToChar(pointer) + "." + getName(pointer + bytevalue + 1);
+//            }
+//        }
+//    }
+
+
+    /*
+        deal with multi pointers
+     */
+    public static String getName(int pointer, boolean inCompressed, int length){
         String result = "";
         int bytevalue = theResponse[pointer];
 
         if(theResponse[pointer] == 0){
             return "";
         }
+        if(length == 0){
+            return "";
+        }
         else{
             if(Utils.checkCompressed(pointer)){
-                return result += getRRName(Utils.extractPos(pointer));
+                return result += getName(extractPos(pointer), true, length - 2);
             }
             else{
-                return result += Utils.byteToChar(pointer) + "." + getRRName(pointer + bytevalue + 1);
+                if(inCompressed){
+                    return result += Utils.byteToChar(pointer) + "." + getName(pointer + bytevalue + 1, true, length);
+                }
+                else{
+                    return result += Utils.byteToChar(pointer) + "." + getName(pointer + bytevalue + 1, false, length - bytevalue - 1);
+                }
             }
         }
     }
 
-    public static String getName(int pointer){
-        String result = getRRName(pointer);
+    /*
+        get Name section
+     */
+    public static String getRRName(int pointer){
+        String result = getName(pointer, false, -1);
         return result.substring(0, result.length() - 1);
     }
+
+    /*
+        get RData section when type is NS
+     */
+    public static String getRDataNS(int pointer, int length){
+        String result = getName(pointer, false, length);
+        return result.substring(0, result.length() - 1);
+    }
+
 
     // convert bytes to ASCII based on the value of theResponse[pointer]
     public static String byteToChar(int pointer){

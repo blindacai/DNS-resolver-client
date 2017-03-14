@@ -29,7 +29,7 @@ public class ResourceRecord {
 
     // how to move forward pointer
     public void setRRname(){
-        this.RRname = Utils.getName(RRpointer);
+        this.RRname = Utils.getRRName(RRpointer);
         RRpointer += 2;
     }
 
@@ -54,14 +54,7 @@ public class ResourceRecord {
     }
 
     public void setRRRdata(){
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < RRRDlength; i++){
-            sb.append(Utils.bitwise(RRpointer + i, 1));
-            sb.append(".");
-        }
-        sb.deleteCharAt(sb.length() - 1);
-        RRRdata = sb.toString();
-
+        this.RRRdata = Utils.byteToChar(RRpointer);
         RRpointer += RRRDlength;
     }
 

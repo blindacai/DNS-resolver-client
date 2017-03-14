@@ -14,7 +14,7 @@
 //            if((data[RRpointer] & 0xc0) == 0xc0){
 //                RRpointer++;
 //                sb.append(".");
-//                sb.append(Utils.getName(data[RRpointer]));
+//                sb.append(Utils.getRRName(data[RRpointer]));
 //                RRpointer++;
 //                break;
 //
