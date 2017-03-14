@@ -29,8 +29,7 @@ public class ResourceRecord {
     public int getPointer(){
         return RRpointer;
     }
-
-    // how to move forward pointer
+    
     public void setRRname(){
         this.RRname = Utils.getRRName(RRpointer);
         RRpointer += Utils.getNameLength(RRpointer);

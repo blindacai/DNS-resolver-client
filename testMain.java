@@ -49,11 +49,14 @@ public class testMain {
         QuerySection qs = new QuerySection(response);
         pointer_pos = qs.getPointer();
 
+        // may not be false if contains cname
         // Answers
         System.out.println("Answers: " + header.getANCount());
-        ResourceRecord answer = new ResourceRecord(response, pointer_pos, false);
-        Utils.toPrint(answer);
-        pointer_pos = answer.getPointer();
+        for(int i = 0; i < header.getANCount(); i++){
+            ResourceRecord answer = new ResourceRecord(response, pointer_pos, false);
+            Utils.toPrint(answer);
+            pointer_pos = answer.getPointer();
+        }
 
         // Authoritative
         System.out.println("Nameservers: " + header.getNsCount());
