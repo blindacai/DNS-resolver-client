@@ -11,7 +11,8 @@ public class testMain {
     public static void main(String[] args) throws IOException {
 
         Datagram datagram = new Datagram(DNS, FQDN);
-        new DNSResponse();
+        DNSResponse dnsResponse = new DNSResponse();
+
 
 //        System.out.println(Utils.byteLookup(89));
 //        System.out.println(Utils.getRDataNS(89, 6));

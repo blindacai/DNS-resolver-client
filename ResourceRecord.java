@@ -56,7 +56,12 @@ public class ResourceRecord {
     }
 
     public void setRRRdata(){
-        this.RRRdata = nameServer? Utils.getRDataNS(RRpointer, RRRDlength) : Utils.getRDataIP(RRRDlength, RRpointer);
+        if(RRtype.equals("CN") || RRtype.equals("NS")){
+            this.RRRdata = Utils.getRDataNS(RRpointer, RRRDlength);
+        }
+        else{
+            this.RRRdata = Utils.getRDataIP(RRRDlength, RRpointer);
+        }
         RRpointer += RRRDlength;
     }
 
