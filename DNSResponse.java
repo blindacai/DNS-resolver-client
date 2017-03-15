@@ -20,7 +20,9 @@ public class DNSResponse {
         answers = new ArrayList<ResourceRecord>();
         authos = new ArrayList<ResourceRecord>();
         additionals = new ArrayList<ResourceRecord>();
+    }
 
+    public void printAll(){
         printHeader();
         getQuerySection();
         printAnswers();
