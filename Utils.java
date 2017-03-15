@@ -71,7 +71,6 @@ public class Utils {
         get RData section when type is NS
      */
     public static String getRDataNS(int pointer, int length){
-        System.out.println("length: " + length);
         String result = getName(pointer, false, length);
         return result.substring(0, result.length() - 1);
     }

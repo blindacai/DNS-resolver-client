@@ -84,4 +84,14 @@ public class DNSResponse {
     public Header getHeader() {
         return header;
     }
+
+    public String additionalLookup(String nameServer){
+        for(ResourceRecord addtional : additionals){
+            if(addtional.getRRname().equals(nameServer)){
+                return addtional.getRRRdata();
+            }
+        }
+
+        return null;
+    }
 }

@@ -20,6 +20,7 @@ public class Header {
         this.answerCount = Utils.bitwise(6, 2);
         this.nsCount = Utils.bitwise(8, 2);
         this.additionalCount = Utils.bitwise(10, 2);
+        setAutho();
 
         this.pointer = 12;
     }
@@ -30,6 +31,12 @@ public class Header {
 
     public int getQDCount(){
         return questionCount;
+    }
+
+    public void setAutho(){
+        if(answerCount > 0){
+            this.authoritative = true;
+        }
     }
 
     /*
@@ -59,5 +66,9 @@ public class Header {
 
     public int getPointer(){
         return this.pointer;
+    }
+
+    public boolean isAuthoritative() {
+        return authoritative;
     }
 }
