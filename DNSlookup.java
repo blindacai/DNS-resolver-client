@@ -49,8 +49,40 @@ public class DNSlookup {
 	    }
 	}
 
+		String rootDNS = args[0];
+		String DNS = rootDNS;
+		String FQDN = args[1];
+		DNSResponse dnsResponse;
 
-	// Start adding code here to initiate the lookup
+		int query_count = 1;
+		boolean findAnswer = false;
+
+		while(!findAnswer){
+			Datagram datagram = new Datagram(DNS, FQDN);
+			dnsResponse = new DNSResponse();
+			dnsResponse.printAll();
+
+			boolean autho = dnsResponse.getHeader().isAuthoritative();
+			if(autho){
+				String answer_type = dnsResponse.getAnswers().get(0).getRRtype();
+
+				if(answer_type.equals("A") || answer_type.equals("AAAA")){
+					findAnswer = true;
+					break;
+				}
+				else{
+					FQDN = dnsResponse.getAnswers().get(0).getRRRdata();
+					DNS = rootDNS;
+				}
+			}
+			else{
+				String first_NS = dnsResponse.getAuthos().get(0).getRRRdata();
+				String child_DNS = dnsResponse.additionalLookup(first_NS);
+				if(child_DNS != null){
+					DNS = child_DNS;
+				}
+			}
+		}
 	
     }
     
