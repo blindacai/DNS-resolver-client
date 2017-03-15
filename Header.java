@@ -13,8 +13,8 @@ public class Header {
     private boolean authoritative = false;// Is this an authoritative record
     private int questionCount = 0;
 
-    public Header(byte[] theResponse){
-        this.theResponse = theResponse;
+    public Header(){
+        this.theResponse = Utils.getResponse();
         this.queryID = Utils.bitwise(0, 2);
         this.questionCount = Utils.bitwise(4, 2);
         this.answerCount = Utils.bitwise(6, 2);

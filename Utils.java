@@ -5,10 +5,6 @@ public class Utils {
     private static byte[] theResponse;
     public static final int MAX_LEN = 1024;
 
-    public static void setReponse(byte[] response){
-        theResponse = response;
-    }
-
     public static String QTypelookup(int type){
         switch(type){
             case 1:
@@ -75,6 +71,7 @@ public class Utils {
         get RData section when type is NS
      */
     public static String getRDataNS(int pointer, int length){
+        System.out.println("length: " + length);
         String result = getName(pointer, false, length);
         return result.substring(0, result.length() - 1);
     }
@@ -155,5 +152,13 @@ public class Utils {
 
     public static void toPrint(ResourceRecord rr){
         System.out.format(" %-30s %-10d %-4s %s\n", rr.getRRname(), rr.getRRTTL(), rr.getRRtype(), rr.getRRRdata());
+    }
+
+    public static void setReponse(byte[] response){
+        theResponse = response;
+    }
+
+    public static byte[] getResponse(){
+        return theResponse;
     }
 }
