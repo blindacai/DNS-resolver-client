@@ -21,7 +21,7 @@ public class DNSlookup {
      */
     public static void main(String[] args) throws Exception {
 	String fqdn;
-	DNSResponse_org response; // Just to force compilation
+	DNSResponse response; // Just to force compilation
 	int argCount = args.length;
 	boolean tracingOn = false;
 	boolean IPV6Query = false;
